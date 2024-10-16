@@ -1,14 +1,13 @@
 package com.tobsel.api.fraud.route;
 
-import com.tobsel.api.fraud.config.Constants;
+import com.tobsel.api.fraud.config.KafkaTopic;
+import com.tobsel.api.fraud.config.RestEndpoint;
 import com.tobsel.api.fraud.processor.PaymentEventProcessor;
 import com.tobsel.api.fraud.processor.PaymentEvaluationProcessor;
 import com.tobsel.api.fraud.route.model.PaymentConfirmationEvent;
 import com.tobsel.api.fraud.route.model.PaymentEvaluation;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
-
-import static com.tobsel.api.fraud.config.Constants.RestEndpoint.PAYMENT_EVALUATION;
 
 @Component
 public class PaymentRoute extends RouteBuilder {
@@ -26,7 +25,7 @@ public class PaymentRoute extends RouteBuilder {
 
     @Override
     public void configure() {
-        rest(PAYMENT_EVALUATION)
+        rest(RestEndpoint.PAYMENT_EVALUATION)
             .post()
             .type(PaymentEvaluation.class)
             .to("direct:processPaymentEvaluation");
@@ -35,7 +34,7 @@ public class PaymentRoute extends RouteBuilder {
             .process(paymentEvaluationProcessor)
             .process(paymentEventProcessor);
 
-        from("kafka:" + Constants.KafkaTopic.PAYMENT)
+        from("kafka:" + KafkaTopic.PAYMENT_CONFIRMATION)
             .unmarshal().json(PaymentConfirmationEvent.class)
             .process(paymentEventProcessor);
     }
