@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: fraud-detection-management-api
+
+camel:
+  rest:
+    component: jetty
+    port: 8080
+    binding-mode: json
+  component:
+    kafka:
+      group-id: fraud-detection-management-api
