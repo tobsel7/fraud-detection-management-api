@@ -4,5 +4,10 @@ import java.util.UUID;
 
 public record PaymentEvaluationResult(
     UUID id,
-    PaymentStatus status
-) {}
+    Status result
+) {
+    public enum Status {
+        ACCEPTED,
+        REJECTED
+    }
+}

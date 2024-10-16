@@ -7,6 +7,5 @@ public interface PaymentEvent {
     UUID userId();
     String amount();
     String timestamp();
-
     PaymentStatus status();
 }

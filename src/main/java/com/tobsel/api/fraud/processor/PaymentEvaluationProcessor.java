@@ -18,18 +18,24 @@ public class PaymentEvaluationProcessor implements Processor {
     public void process(Exchange exchange) {
         PaymentEvaluation paymentEvaluation = exchange.getIn().getBody(PaymentEvaluation.class);
 
-        boolean isFraud = isFraudulent(paymentEvaluation);
-        if (isFraud) {
+        PaymentEvaluationResult.Status evaluationStatus = evaluatePayment(paymentEvaluation);
+
+        if (evaluationStatus == PaymentEvaluationResult.Status.REJECTED) {
             logger.info("Detected fraudulent payment");
         }
 
         exchange.getIn().setBody(
-                new PaymentEvaluationResult(paymentEvaluation.id(), PaymentStatus.PENDING),
+                new PaymentEvaluationResult(paymentEvaluation.id(), evaluationStatus),
                 PaymentEvaluationResult.class
         );
+        exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, 200);
     }
 
-    private boolean isFraudulent(PaymentEvaluation paymentEvaluation) {
-        return Double.parseDouble(paymentEvaluation.amount()) > 100.0;
+    private PaymentEvaluationResult.Status evaluatePayment(PaymentEvaluation paymentEvaluation) {
+        if (Double.parseDouble(paymentEvaluation.amount()) > 100.0) {
+            return PaymentEvaluationResult.Status.REJECTED;
+        }
+
+        return PaymentEvaluationResult.Status.ACCEPTED;
     }
 }
