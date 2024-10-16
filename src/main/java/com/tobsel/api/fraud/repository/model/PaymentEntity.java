@@ -13,12 +13,14 @@ public class PaymentEntity {
     private String timestamp;
     private String paymentStatus;
 
+    public PaymentEntity() {}
+
     public PaymentEntity(
-            UUID id,
-            UUID userId,
-            String amount,
-            String timestamp,
-            String paymentStatus
+        UUID id,
+        UUID userId,
+        String amount,
+        String timestamp,
+        String paymentStatus
     ) {
         this.id = id;
         this.userId = userId;
@@ -27,7 +29,23 @@ public class PaymentEntity {
         this.paymentStatus = paymentStatus;
     }
 
-    public PaymentEntity() {
+    public UUID getId() {
+        return id;
+    }
 
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public String getPaymentStatus() {
+        return paymentStatus;
     }
 }

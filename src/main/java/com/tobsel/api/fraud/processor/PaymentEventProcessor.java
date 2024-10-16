@@ -7,7 +7,6 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,10 +22,8 @@ public class PaymentEventProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) {
-        PaymentEvent paymentConfirmation = exchange.getIn().getBody(PaymentEvent.class);
-
-        initializeMDC(paymentConfirmation);
         logger.info("Saving payment status");
+        PaymentEvent paymentConfirmation = exchange.getIn().getBody(PaymentEvent.class);
 
         paymentRepository.save(
             new PaymentEntity(
@@ -38,9 +35,5 @@ public class PaymentEventProcessor implements Processor {
             )
         );
         logger.info("Finished storing payment status");
-    }
-
-    private void initializeMDC(PaymentEvent paymentEvent) {
-        MDC.put("paymentId", paymentEvent.id().toString());
     }
 }

@@ -7,9 +7,4 @@ public record PaymentEvaluation(
     UUID userId,
     String amount,
     String timestamp
-) implements PaymentEvent {
-    @Override
-    public PaymentStatus status() {
-        return PaymentStatus.PENDING;
-    }
-}
+) {}

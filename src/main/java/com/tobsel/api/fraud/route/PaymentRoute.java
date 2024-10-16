@@ -13,30 +13,30 @@ import static com.tobsel.api.fraud.config.Constants.RestEndpoint.PAYMENT_EVALUAT
 @Component
 public class PaymentRoute extends RouteBuilder {
 
-    private final PaymentEventProcessor paymentEventProcessor;
     private final PaymentEvaluationProcessor paymentEvaluationProcessor;
+    private final PaymentEventProcessor paymentEventProcessor;
 
     public PaymentRoute(
-            PaymentEventProcessor paymentEventProcessor,
-            PaymentEvaluationProcessor paymentEvaluationProcessor
+        PaymentEvaluationProcessor paymentEvaluationProcessor,
+        PaymentEventProcessor paymentEventProcessor
     ) {
-        this.paymentEventProcessor = paymentEventProcessor;
         this.paymentEvaluationProcessor = paymentEvaluationProcessor;
+        this.paymentEventProcessor = paymentEventProcessor;
     }
 
     @Override
     public void configure() {
         rest(PAYMENT_EVALUATION)
-                .post()
-                .type(PaymentEvaluation.class)
-                .to("direct:processPaymentEvaluation");
+            .post()
+            .type(PaymentEvaluation.class)
+            .to("direct:processPaymentEvaluation");
 
         from("direct:processPaymentEvaluation")
-                .process(paymentEventProcessor)
-                .process(paymentEvaluationProcessor);
+            .process(paymentEvaluationProcessor)
+            .process(paymentEventProcessor);
 
         from("kafka:" + Constants.KafkaTopic.PAYMENT)
-                .unmarshal().json(PaymentConfirmationEvent.class)
-                .process(paymentEventProcessor);
+            .unmarshal().json(PaymentConfirmationEvent.class)
+            .process(paymentEventProcessor);
     }
 }
