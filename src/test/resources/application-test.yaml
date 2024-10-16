@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:postgresql:9.6.8:///payment
+    username: user
+    password: password
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+camel:
+  component:
+    kafka:
+      brokers: tc://localhost:9093
