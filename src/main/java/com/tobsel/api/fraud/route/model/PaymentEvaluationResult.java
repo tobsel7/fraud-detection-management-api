@@ -2,7 +2,7 @@ package com.tobsel.api.fraud.route.model;
 
 import java.util.UUID;
 
-public record PaymentEvaluationStatus(
+public record PaymentEvaluationResult(
     UUID id,
     PaymentStatus status
 ) {}

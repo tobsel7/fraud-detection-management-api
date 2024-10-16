@@ -44,7 +44,7 @@ when starting the application.
 To initiate a payment, you can use the following curl command:
 
 ```shell
-curl -X POST http://localhost:8080/payment-evaluations -H "Content-Type: application/json" -d @./request/payload/payment-evaluation.json
+curl -X POST http://localhost:8080/payments/evaluations -H "Content-Type: application/json" -d @./request/payload/payment-evaluation.json
 ```
 
 In case you use IntelliJ IDEA, you can use the provided HTTP request file in the `request` folder.

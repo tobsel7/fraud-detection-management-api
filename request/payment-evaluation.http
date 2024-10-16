@@ -1,4 +1,4 @@
-POST http://localhost:8080/payment-evaluations
+POST http://localhost:8080/payments/evaluations
 Content-Type: application/json
 
 < ./payload/payment-evaluation.json

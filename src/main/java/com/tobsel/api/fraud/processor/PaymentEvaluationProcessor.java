@@ -1,6 +1,6 @@
 package com.tobsel.api.fraud.processor;
 
-import com.tobsel.api.fraud.route.model.PaymentEvaluationStatus;
+import com.tobsel.api.fraud.route.model.PaymentEvaluationResult;
 import com.tobsel.api.fraud.route.model.PaymentEvaluation;
 import com.tobsel.api.fraud.route.model.PaymentStatus;
 import org.apache.camel.Exchange;
@@ -24,8 +24,8 @@ public class PaymentEvaluationProcessor implements Processor {
         }
 
         exchange.getIn().setBody(
-                new PaymentEvaluationStatus(paymentEvaluation.id(), PaymentStatus.PENDING),
-                PaymentEvaluationStatus.class
+                new PaymentEvaluationResult(paymentEvaluation.id(), PaymentStatus.PENDING),
+                PaymentEvaluationResult.class
         );
     }
 
