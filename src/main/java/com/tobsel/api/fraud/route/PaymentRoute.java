@@ -6,6 +6,7 @@ import com.tobsel.api.fraud.processor.PaymentEventProcessor;
 import com.tobsel.api.fraud.processor.PaymentEvaluationProcessor;
 import com.tobsel.api.fraud.route.model.PaymentConfirmationEvent;
 import com.tobsel.api.fraud.route.model.PaymentEvaluation;
+import com.tobsel.api.fraud.route.model.PaymentEvaluationResult;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.kafka.KafkaConstants;
 import org.springframework.stereotype.Component;
@@ -33,11 +34,12 @@ public class PaymentRoute extends RouteBuilder {
 
         from("direct:processPaymentEvaluation")
             .process(paymentEvaluationProcessor)
+            .convertBodyTo(PaymentEvaluationResult.class)
             .wireTap("direct:producePaymentEvaluationResult")
             .process(paymentEventProcessor);
 
         from("direct:producePaymentEvaluationResult")
-            .setHeader(KafkaConstants.KEY, simple("${body.evaluation.id}"))
+            .setHeader(KafkaConstants.KEY, simple("${body.id}"))
             .marshal().json()
             .to("kafka:" + KafkaTopic.PAYMENT_EVALUATION_RESULT);
 

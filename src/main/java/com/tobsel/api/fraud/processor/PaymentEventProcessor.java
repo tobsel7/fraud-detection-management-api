@@ -34,6 +34,5 @@ public class PaymentEventProcessor implements Processor {
                 paymentConfirmation.status().toString()
             )
         );
-        logger.info("Finished storing payment status");
     }
 }

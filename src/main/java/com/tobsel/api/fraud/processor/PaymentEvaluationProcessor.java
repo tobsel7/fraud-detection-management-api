@@ -2,6 +2,7 @@ package com.tobsel.api.fraud.processor;
 
 import com.tobsel.api.fraud.route.model.PaymentEvaluationResult;
 import com.tobsel.api.fraud.route.model.PaymentEvaluation;
+import com.tobsel.api.fraud.route.model.RawPaymentEvaluationResult;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.slf4j.Logger;
@@ -19,18 +20,16 @@ public class PaymentEvaluationProcessor implements Processor {
 
         PaymentEvaluationResult.Status evaluationResult = evaluatePayment(paymentEvaluation);
 
-        if (evaluationResult == PaymentEvaluationResult.Status.REJECTED) {
-            logger.info("Detected fraudulent payment");
-        }
-
         exchange.getIn().setBody(
-            new PaymentEvaluationResult(paymentEvaluation, evaluationResult),
-            PaymentEvaluationResult.class
+            new RawPaymentEvaluationResult(paymentEvaluation, evaluationResult),
+                RawPaymentEvaluationResult.class
         );
     }
 
     private PaymentEvaluationResult.Status evaluatePayment(PaymentEvaluation paymentEvaluation) {
         if (Double.parseDouble(paymentEvaluation.amount()) > 100.0) {
+            logger.info("Detected fraudulent payment");
+
             return PaymentEvaluationResult.Status.REJECTED;
         }
 
